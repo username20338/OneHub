@@ -1,5 +1,6 @@
 # Criando um arquivo Lua para o script do OneHub
 
+
 script_conteudo = '''\
 -- [ Serviços do Roblox ]
 local Players = game:GetService("Players")
