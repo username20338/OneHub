@@ -1,1 +1,115 @@
-# OneHub
+# Criando um arquivo Lua para o script do OneHub
+
+script_conteudo = '''\
+-- [ Serviços do Roblox ]
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+-- [ Variáveis Globais ]
+_G.AutoFarmAtivado = false
+_G.AutoColetaBaus = false
+_G.AutoHaki = false
+
+-- [ Criar Interface GUI ]
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 350, 0, 400)
+Frame.Position = UDim2.new(0, 50, 0, 100)
+Frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Frame.BackgroundTransparency = 0.3
+Frame.Parent = ScreenGui
+
+local UIStroke = Instance.new("UIStroke", Frame)
+UIStroke.Thickness = 2
+UIStroke.Color = Color3.fromRGB(255, 170, 0)
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 50)
+Title.Text = "OneHub - Blox Fruits"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Title.Parent = Frame
+
+-- [ Criar Função de Botão ]
+local function CriarBotao(nome, parent, posicao, variavel, callback)
+    local Botao = Instance.new("TextButton")
+    Botao.Size = UDim2.new(0, 300, 0, 50)
+    Botao.Position = UDim2.new(0, 25, 0, posicao)
+    Botao.Text = nome .. " [OFF]"
+    Botao.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Botao.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Botao.Parent = parent
+
+    Botao.MouseButton1Click:Connect(function()
+        _G[variavel] = not _G[variavel]
+        Botao.Text = nome .. " [" .. (_G[variavel] and "ON" or "OFF") .. "]"
+        callback(_G[variavel])
+    end)
+
+    return Botao
+end
+
+-- [ Criando Botões ]
+local BotaoAutoFarm = CriarBotao("Auto Farm", Frame, 60, "AutoFarmAtivado", function(estado)
+    if estado then
+        print("Auto Farm Ativado!")
+        while _G.AutoFarmAtivado do
+            wait(1)
+            -- Código para farm automático (matar NPCs, coletar XP)
+        end
+    else
+        print("Auto Farm Desativado!")
+    end
+end)
+
+local BotaoAutoColeta = CriarBotao("Auto Coleta de Baús", Frame, 120, "AutoColetaBaus", function(estado)
+    if estado then
+        print("Auto Coleta de Baús Ativado!")
+        while _G.AutoColetaBaus do
+            wait(2)
+            -- Código para coletar baús automaticamente
+        end
+    else
+        print("Auto Coleta de Baús Desativado!")
+    end
+end)
+
+local BotaoAutoHaki = CriarBotao("Auto Haki", Frame, 180, "AutoHaki", function(estado)
+    if estado then
+        print("Auto Haki Ativado!")
+        while _G.AutoHaki do
+            wait(5)
+            if not LocalPlayer.Character:FindFirstChild("HasBuso") then
+                ReplicatedStorage.Remotes.CommF_:InvokeServer("Buso")
+            end
+        end
+    else
+        print("Auto Haki Desativado!")
+    end
+end)
+
+-- [ Botão para Fechar Interface ]
+local BotaoFechar = Instance.new("TextButton")
+BotaoFechar.Size = UDim2.new(0, 40, 0, 40)
+BotaoFechar.Position = UDim2.new(1, -50, 0, 5)
+BotaoFechar.Text = "X"
+BotaoFechar.TextColor3 = Color3.fromRGB(255, 255, 255)
+BotaoFechar.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+BotaoFechar.Parent = Frame
+
+BotaoFechar.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+'''
+
+# Criando o arquivo .lua
+caminho_arquivo = "/mnt/data/OneHub.lua"
+with open(caminho_arquivo, "w") as arquivo:
+    arquivo.write(script_conteudo)
+
+# Retornando o caminho do arquivo
+caminho_arquivo
